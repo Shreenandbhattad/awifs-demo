@@ -111,7 +111,7 @@
       overflow-y: auto;
     }
 
-    /* TABS (for additional navigation if needed) */
+    /* TABS */
     .nav-tabs {
       display: flex;
       gap: 15px;
@@ -133,13 +133,68 @@
     form label { display: block; margin: 10px 0 5px; }
     form input, form select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 3px; }
     form button { margin-top: 15px; padding: 10px 15px; border: none; background-color: #27ae60; color: #fff; border-radius: 3px; cursor: pointer; }
+
+    /* LOGIN SECTION */
+    #loginSection {
+      margin-left: 240px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      width: 300px;
+      margin-top: 50px;
+    }
+    #loginSection h2 {
+      margin-bottom: 15px;
+    }
+    #loginSection input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    #loginSection button {
+      padding: 10px 15px;
+      width: 100%;
+      border: none;
+      background-color: #2980b9;
+      color: #fff;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    #loginMessage {
+      margin-top: 10px;
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>AWIFS<br>
-    Mock Stock</h2>
+
+  <!-- Login Form -->
+  <div id="loginSection">
+    <h2>Login</h2>
+    <label for="uid">UID:</label>
+    <input type="text" id="uid" required>
+    
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    
+    <button onclick="login()">Login</button>
+    <p id="loginMessage"></p>
+  </div>
+
+  <!-- Participant Data Section (Hidden initially) -->
+  <div id="participantData" style="display: none; margin-left: 240px; padding: 20px;">
+    <h3>Welcome, <span id="participantName"></span>!</h3>
+    <p>Available Funds: $<span id="funds"></span></p>
+    <h4>Your Holdings:</h4>
+    <p id="holdings"></p>
+  </div>
+
+  <!-- Sidebar (Visible after login, for navigation) -->
+  <div class="sidebar" id="sidebar" style="display:none;">
+    <h2>AWIFS<br>Mock Stock</h2>
     <ul>
       <li class="active" onclick="showSection('dashboard')">Dashboard</li>
       <li onclick="showSection('trade')">Trade</li>
@@ -150,7 +205,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" id="mainContent" style="display:none;">
     <!-- Dashboard Section -->
     <div id="dashboard" class="section">
       <div class="header">
@@ -312,39 +367,15 @@
     </div>
   </div>
 
-  <!-- Login Form -->
-<div id="loginSection">
-    <h2>Login</h2>
-    <label for="uid">UID:</label>
-    <input type="text" id="uid" required>
-
-    <label for="name">Name:</label>
-    <input type="text" id="name" required>
-
-    <button onclick="login()">Login</button>
-    <p id="loginMessage"></p>
-</div>
-
-<!-- Participant Data Section (Hidden initially) -->
-<div id="participantData" style="display: none;">
-    <h3>Welcome, <span id="participantName"></span>!</h3>
-    <p>Available Funds: $<span id="funds"></span></p>
-    <h4>Your Holdings:</h4>
-    <p id="holdings"></p>
-</div>
-
-
   <!-- SCRIPTS -->
   <script>
     // Function to switch between sections
     function showSection(section) {
-      // Remove active class from sidebar items
       document.querySelectorAll('.sidebar ul li').forEach(item => {
         item.classList.remove('active');
       });
-      // Mark the clicked sidebar item as active (simple approach, you may improve this based on your structure)
       document.querySelector(`.sidebar ul li[onclick*="${section}"]`).classList.add('active');
-
+      
       document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
       document.getElementById(section).style.display = 'block';
     }
@@ -354,83 +385,6 @@
       const query = document.getElementById('searchInput').value;
       alert('Search for: ' + query + ' (Functionality under development)');
     }
-      /**
- * Logs in a participant by checking the UID and Name in the "Participants" sheet.
- *
- * @param {string} uid - The unique identifier for the participant.
- * @param {string} name - The participant's name.
- * @return {Object} An object containing login status, message, funds, and holdings.
- */
-function loginParticipant(uid, name) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Participants");
-  var data = sheet.getDataRange().getValues(); // Get all participant data
-function login() {
-    var uid = document.getElementById("uid").value;
-    var name = document.getElementById("name").value;
-    
-    fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            action: "loginParticipant",
-            uid: uid,
-            name: name
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById("loginSection").style.display = "none"; // Hide login
-            document.getElementById("participantData").style.display = "block"; // Show user details
-            
-            document.getElementById("participantName").textContent = name;
-            document.getElementById("funds").textContent = data.funds;
-            document.getElementById("holdings").textContent = data.holdings;
-        } else {
-            document.getElementById("loginMessage").textContent = data.message;
-        }
-    })
-    .catch(error => console.error("Error:", error));
-}
-
-  // Loop through rows (skipping the header row)
-  for (var i = 1; i < data.length; i++) {
-    if (data[i][0] == uid && data[i][1] == name) {
-      return {
-        success: true,
-        message: "Login successful",
-        funds: data[i][2],    // Assumes available funds are in column C
-        holdings: data[i][3]  // Assumes holdings details are in column D
-      };
-    }
-  }
-
-  // If no match is found, return an error message
-  return { success: false, message: "Invalid UID or Name" };
-}
-
-/**
- * The main function to handle POST requests from the frontend.
- * It parses the request and routes actions accordingly.
- *
- * @param {Object} e - The event parameter containing POST data.
- * @return {ContentService.TextOutput} The JSON response.
- */
-function doPost(e) {
-  var request = JSON.parse(e.postData.contents);
-  var action = request.action;
-
-  if (action == "loginParticipant") {
-    var response = loginParticipant(request.uid, request.name);
-    return ContentService
-      .createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON);
-  } else {
-    return ContentService
-      .createTextOutput(JSON.stringify({ success: false, message: "Invalid action" }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
 
     // Submit order through Google Apps Script endpoint
     function submitOrder(event) {
@@ -462,7 +416,7 @@ function doPost(e) {
 
     // Load news (dummy fetch; replace with your API endpoint)
     function loadNews() {
-      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec')
+      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec?action=getNews')
       .then(response => response.json())
       .then(news => {
         const newsFeed = document.getElementById('newsFeed');
@@ -492,7 +446,40 @@ function doPost(e) {
       });
     }
 
-    // Initial load
+    // Login function to authenticate participant via Apps Script
+    function login() {
+      var uid = document.getElementById("uid").value;
+      var name = document.getElementById("name").value;
+      
+      fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "loginParticipant",
+          uid: uid,
+          name: name
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Hide login section and show main content
+          document.getElementById("loginSection").style.display = "none";
+          document.getElementById("participantData").style.display = "block";
+          document.getElementById("sidebar").style.display = "block";
+          document.getElementById("mainContent").style.display = "block";
+
+          document.getElementById("participantName").textContent = name;
+          document.getElementById("funds").textContent = data.funds;
+          document.getElementById("holdings").textContent = data.holdings;
+        } else {
+          document.getElementById("loginMessage").textContent = data.message;
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    }
+
+    // Initial load functions for news and chart
     window.onload = function() {
       loadNews();
       loadChart();
