@@ -312,6 +312,28 @@
     </div>
   </div>
 
+  <!-- Login Form -->
+<div id="loginSection">
+    <h2>Login</h2>
+    <label for="uid">UID:</label>
+    <input type="text" id="uid" required>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+
+    <button onclick="login()">Login</button>
+    <p id="loginMessage"></p>
+</div>
+
+<!-- Participant Data Section (Hidden initially) -->
+<div id="participantData" style="display: none;">
+    <h3>Welcome, <span id="participantName"></span>!</h3>
+    <p>Available Funds: $<span id="funds"></span></p>
+    <h4>Your Holdings:</h4>
+    <p id="holdings"></p>
+</div>
+
+
   <!-- SCRIPTS -->
   <script>
     // Function to switch between sections
@@ -332,6 +354,83 @@
       const query = document.getElementById('searchInput').value;
       alert('Search for: ' + query + ' (Functionality under development)');
     }
+      /**
+ * Logs in a participant by checking the UID and Name in the "Participants" sheet.
+ *
+ * @param {string} uid - The unique identifier for the participant.
+ * @param {string} name - The participant's name.
+ * @return {Object} An object containing login status, message, funds, and holdings.
+ */
+function loginParticipant(uid, name) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Participants");
+  var data = sheet.getDataRange().getValues(); // Get all participant data
+function login() {
+    var uid = document.getElementById("uid").value;
+    var name = document.getElementById("name").value;
+    
+    fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            action: "loginParticipant",
+            uid: uid,
+            name: name
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("loginSection").style.display = "none"; // Hide login
+            document.getElementById("participantData").style.display = "block"; // Show user details
+            
+            document.getElementById("participantName").textContent = name;
+            document.getElementById("funds").textContent = data.funds;
+            document.getElementById("holdings").textContent = data.holdings;
+        } else {
+            document.getElementById("loginMessage").textContent = data.message;
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+  // Loop through rows (skipping the header row)
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] == uid && data[i][1] == name) {
+      return {
+        success: true,
+        message: "Login successful",
+        funds: data[i][2],    // Assumes available funds are in column C
+        holdings: data[i][3]  // Assumes holdings details are in column D
+      };
+    }
+  }
+
+  // If no match is found, return an error message
+  return { success: false, message: "Invalid UID or Name" };
+}
+
+/**
+ * The main function to handle POST requests from the frontend.
+ * It parses the request and routes actions accordingly.
+ *
+ * @param {Object} e - The event parameter containing POST data.
+ * @return {ContentService.TextOutput} The JSON response.
+ */
+function doPost(e) {
+  var request = JSON.parse(e.postData.contents);
+  var action = request.action;
+
+  if (action == "loginParticipant") {
+    var response = loginParticipant(request.uid, request.name);
+    return ContentService
+      .createTextOutput(JSON.stringify(response))
+      .setMimeType(ContentService.MimeType.JSON);
+  } else {
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, message: "Invalid action" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
 
     // Submit order through Google Apps Script endpoint
     function submitOrder(event) {
@@ -341,7 +440,7 @@
       const quantity = document.getElementById('quantity').value;
       const price = document.getElementById('price').value;
 
-      fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -363,7 +462,7 @@
 
     // Load news (dummy fetch; replace with your API endpoint)
     function loadNews() {
-      fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=getNews')
+      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec')
       .then(response => response.json())
       .then(news => {
         const newsFeed = document.getElementById('newsFeed');
