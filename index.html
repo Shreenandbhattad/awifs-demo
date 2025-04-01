@@ -396,7 +396,7 @@
       const quantity = document.getElementById('quantity').value;
       const price = document.getElementById('price').value;
   
-      fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxHWaED_QIRndWrMH85oCcCH84-5khhQaQTZw3RQeKfzzgWKc5BqFSm5hJiTiXnYK4/exec", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -417,11 +417,13 @@
     }
     
     // Function to log in the participant using the Apps Script endpoint
+
     function login() {
+      console.log("Login button clicked");
       var uid = document.getElementById("uid").value;
       var name = document.getElementById("name").value;
       
-      fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxHWaED_QIRndWrMH85oCcCH84-5khhQaQTZw3RQeKfzzgWKc5BqFSm5hJiTiXnYK4/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
