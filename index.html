@@ -2,14 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AWIFS - Mock Stock Competition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Stock Dashboard</title>
   <style>
-    /* RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { font-family: 'Arial', sans-serif; background: #f4f7f9; color: #333; }
-
-    /* SIDEBAR */
+    /* Basic styles for the dashboard */
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f7f9; color: #333; }
     .sidebar {
       position: fixed;
       top: 0;
@@ -27,57 +24,18 @@
       font-size: 24px;
       letter-spacing: 2px;
     }
-    .sidebar ul {
-      list-style: none;
-    }
+    .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li {
       padding: 15px 20px;
       margin-bottom: 10px;
       cursor: pointer;
       border-radius: 3px;
     }
-    .sidebar ul li:hover, .sidebar ul li.active {
-      background-color: #34495e;
-    }
-
-    /* MAIN CONTENT */
-    .main-content {
-      margin-left: 240px;
-      padding: 20px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header .market-indices {
-      display: flex;
-      gap: 20px;
-    }
-    .header .market-indices div {
-      background: #ecf0f1;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-    .header .search-bar input {
-      padding: 8px;
-      width: 200px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-    .header .search-bar button {
-      padding: 8px 12px;
-      margin-left: 5px;
-      border: none;
-      background-color: #2980b9;
-      color: #fff;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    /* CARDS */
+    .sidebar ul li:hover, .sidebar ul li.active { background-color: #34495e; }
+    
+    .main-content { margin-left: 240px; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .header .welcome { font-size: 20px; }
     .card {
       background: #fff;
       padding: 20px;
@@ -85,11 +43,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    h2.section-title {
-      margin-bottom: 15px;
-    }
-
-    /* TABLE STYLES */
+    
     table {
       width: 100%;
       border-collapse: collapse;
@@ -101,100 +55,12 @@
       text-align: left;
     }
     th { background: #ecf0f1; }
-
-    /* NEWS FEED */
-    .news-feed {
-      background: #f7f7f7;
-      padding: 10px;
-      border-radius: 5px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    /* TABS */
-    .nav-tabs {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .nav-tabs button {
-      padding: 10px 15px;
-      border: none;
-      background-color: #bdc3c7;
-      cursor: pointer;
-      border-radius: 3px;
-    }
-    .nav-tabs button.active {
-      background-color: #2980b9;
-      color: #fff;
-    }
-
-    /* FORM STYLES */
-    form label { display: block; margin: 10px 0 5px; }
-    form input, form select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 3px; }
-    form button { margin-top: 15px; padding: 10px 15px; border: none; background-color: #27ae60; color: #fff; border-radius: 3px; cursor: pointer; }
-
-    /* LOGIN SECTION */
-    #loginSection {
-      margin-left: 240px;
-      padding: 20px;
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      border-radius: 5px;
-      width: 300px;
-      margin-top: 50px;
-    }
-    #loginSection h2 {
-      margin-bottom: 15px;
-    }
-    #loginSection input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-    #loginSection button {
-      padding: 10px 15px;
-      width: 100%;
-      border: none;
-      background-color: #2980b9;
-      color: #fff;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    #loginMessage {
-      margin-top: 10px;
-      color: red;
-    }
   </style>
 </head>
 <body>
-
-  <!-- Login Form -->
-  <div id="loginSection">
-    <h2>Login</h2>
-    <label for="uid">UID:</label>
-    <input type="text" id="uid" required>
-    
-    <label for="name">Name:</label>
-    <input type="text" id="name" required>
-    
-    <button onclick="login()">Login</button>
-    <p id="loginMessage"></p>
-  </div>
-
-  <!-- Participant Data Section (Hidden initially) -->
-  <div id="participantData" style="display: none; margin-left: 240px; padding: 20px;">
-    <h3>Welcome, <span id="participantName"></span>!</h3>
-    <p>Available Funds: $<span id="funds"></span></p>
-    <h4>Your Holdings:</h4>
-    <p id="holdings"></p>
-  </div>
-
-  <!-- Sidebar (Visible after login, for navigation) -->
-  <div class="sidebar" id="sidebar" style="display:none;">
-    <h2>AWIFS<br>Mock Stock</h2>
+  <!-- Sidebar Navigation -->  
+  <div class="sidebar">
+    <h2>AWIFS Mock Stock</h2>
     <ul>
       <li class="active" onclick="showSection('dashboard')">Dashboard</li>
       <li onclick="showSection('trade')">Trade</li>
@@ -204,81 +70,25 @@
     </ul>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content" id="mainContent" style="display:none;">
-    <!-- Dashboard Section -->
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Dashboard Section -->  
     <div id="dashboard" class="section">
       <div class="header">
-        <div class="market-indices">
-          <div>Index A: <span id="indexA">1000</span></div>
-          <div>Index B: <span id="indexB">2000</span></div>
-          <div>Index C: <span id="indexC">3000</span></div>
-        </div>
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search stocks...">
-          <button onclick="searchStock()">Search</button>
-        </div>
+        <div class="welcome">Welcome, <span id="participantName"></span>!</div>
+        <div class="funds">Available Funds: $<span id="funds"></span></div>
       </div>
-
       <div class="card">
-        <h2 class="section-title">Watchlist</h2>
-        <table id="watchlistTable">
-          <thead>
-            <tr>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>% Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>THC</td>
-              <td>$100</td>
-              <td>+1%</td>
-            </tr>
-            <tr>
-              <td>Fuel Zone</td>
-              <td>$200</td>
-              <td>-0.5%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card">
-        <h2 class="section-title">Recent Transactions</h2>
-        <table id="transactionsTable">
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>Stock</th>
-              <th>Type</th>
-              <th>Quantity</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>12:01</td>
-              <td>THC</td>
-              <td>Buy</td>
-              <td>10</td>
-              <td>$100</td>
-            </tr>
-          </tbody>
-        </table>
+        <h3>Your Holdings</h3>
+        <div id="holdings">
+          <!-- Holdings details will be populated here -->  
+        </div>
       </div>
     </div>
 
     <!-- Trade Section -->
     <div id="trade" class="section" style="display: none;">
-      <h2 class="section-title">Trade</h2>
-      <div class="card">
-        <h3>Stock Information</h3>
-        <div id="stockInfo">
-          <p>Select a stock from your watchlist or search for one.</p>
-        </div>
-      </div>
+      <h2>Trade</h2>
       <div class="card">
         <h3>Order Form</h3>
         <form id="orderForm" onsubmit="submitOrder(event)">
@@ -300,192 +110,62 @@
 
     <!-- Portfolio Section -->
     <div id="portfolio" class="section" style="display: none;">
-      <h2 class="section-title">Portfolio</h2>
-      <div class="card">
-        <h3>Your Holdings</h3>
-        <table id="portfolioTable">
-          <thead>
-            <tr>
-              <th>Stock</th>
-              <th>Quantity</th>
-              <th>Purchase Price</th>
-              <th>Current Price</th>
-              <th>Total Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Fuel Zone</td>
-              <td>50</td>
-              <td>$100</td>
-              <td>$105</td>
-              <td>$5250</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h3>Portfolio Performance</h3>
-        <canvas id="performanceChart" width="400" height="200"></canvas>
+      <h2>Portfolio</h2>
+      <div class="card" id="portfolioData">
+        <!-- Portfolio details can be added here -->  
+        <p>Portfolio details coming soon!</p>
       </div>
     </div>
 
     <!-- News Section -->
     <div id="news" class="section" style="display: none;">
-      <h2 class="section-title">Market News</h2>
-      <div class="news-feed" id="newsFeed">
-        <p>Chat corner temporarily closed down</p>
+      <h2>Market News</h2>
+      <div class="card" id="newsFeed">
+        <!-- News content will be loaded here -->  
+        <p>No news available at the moment.</p>
       </div>
     </div>
 
     <!-- Leaderboard Section -->
     <div id="leaderboard" class="section" style="display: none;">
-      <h2 class="section-title">Leaderboard</h2>
-      <div class="card">
-        <table id="leaderboardTable">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>User</th>
-              <th>Portfolio Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Kamya Gupta</td>
-              <td>$50,000</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Neeraja Asnani</td>
-              <td>$47,000</td>
-            </tr>
-          </tbody>
-        </table>
+      <h2>Leaderboard</h2>
+      <div class="card" id="leaderboardTable">
+        <!-- Leaderboard details can be added here -->  
+        <p>Leaderboard data not available.</p>
       </div>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
   <script>
-    // Function to switch between sections
+    // Function to switch between sections based on sidebar clicks
     function showSection(section) {
-      document.querySelectorAll('.sidebar ul li').forEach(item => {
-        item.classList.remove('active');
-      });
-      document.querySelector(`.sidebar ul li[onclick*="${section}"]`).classList.add('active');
-      
-      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      // Remove active class from all sidebar items
+      var items = document.querySelectorAll('.sidebar ul li');
+      items.forEach(function(item) { item.classList.remove('active'); });
+      // Activate the clicked item
+      var activeItem = document.querySelector('.sidebar ul li[onclick*=\"' + section + '\"]');
+      if(activeItem) activeItem.classList.add('active');
+  
+      // Hide all sections
+      var sections = document.querySelectorAll('.section');
+      sections.forEach(function(sec) { sec.style.display = 'none'; });
+      // Display the selected section
       document.getElementById(section).style.display = 'block';
     }
-
-    // Dummy search function
-    function searchStock() {
-      const query = document.getElementById('searchInput').value;
-      alert('Search for: ' + query + ' (Functionality under development)');
-    }
-
-    // Submit order through Google Apps Script endpoint
-    function submitOrder(event) {
-      event.preventDefault();
-      const orderType = document.getElementById('orderType').value;
-      const stockSymbol = document.getElementById('stockSymbol').value;
-      const quantity = document.getElementById('quantity').value;
-      const price = document.getElementById('price').value;
-
-      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'submitOrder',
-          orderType,
-          stockSymbol,
-          quantity,
-          price
-        })
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert('Order submitted: ' + data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    }
-
-    // Load news (dummy fetch; replace with your API endpoint)
-    function loadNews() {
-      fetch('https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec?action=getNews')
-      .then(response => response.json())
-      .then(news => {
-        const newsFeed = document.getElementById('newsFeed');
-        newsFeed.innerHTML = news.map(item => `<p>${item}</p>`).join('');
-      })
-      .catch(error => {
-        console.error('Error fetching news:', error);
-      });
-    }
-
-    // Load a sample performance chart (requires Chart.js)
-    function loadChart() {
-      const ctx = document.getElementById('performanceChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Portfolio Value',
-            data: [30000, 32000, 31000, 33000, 34000, 35000],
-            backgroundColor: 'rgba(41, 128, 185, 0.2)',
-            borderColor: 'rgba(41, 128, 185, 1)',
-            borderWidth: 2
-          }]
-        },
-        options: { scales: { y: { beginAtZero: false } } }
-      });
-    }
-
-    // Login function to authenticate participant via Apps Script
-    function login() {
-      var uid = document.getElementById("uid").value;
-      var name = document.getElementById("name").value;
-      
-      fetch("https://script.google.com/macros/s/AKfycbyRZNytT261bX2mi012OySFcc_nvp7W_pcJALPdwzl0QoDzKmXZYQjPi6fsVnvHq8U/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "loginParticipant",
-          uid: uid,
-          name: name
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Hide login section and show main content
-          document.getElementById("loginSection").style.display = "none";
-          document.getElementById("participantData").style.display = "block";
-          document.getElementById("sidebar").style.display = "block";
-          document.getElementById("mainContent").style.display = "block";
-
-          document.getElementById("participantName").textContent = name;
-          document.getElementById("funds").textContent = data.funds;
-          document.getElementById("holdings").textContent = data.holdings;
-        } else {
-          document.getElementById("loginMessage").textContent = data.message;
-        }
-      })
-      .catch(error => console.error("Error:", error));
-    }
-
-    // Initial load functions for news and chart
+    
+    // Retrieve and display participant data from localStorage
     window.onload = function() {
-      loadNews();
-      loadChart();
-    };
-  </script>
-  <!-- Chart.js CDN for performance chart -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</body>
-</html>
+      var name = localStorage.getItem('participantName');\n      \n      // If no name was stored (unexpected), use a default placeholder\n      if (!name) { name = 'Participant'; }\n      document.getElementById('participantName').textContent = name;\n      \n      var funds = localStorage.getItem('funds') || '0';\n      document.getElementById('funds').textContent = funds;\n      \n      var holdings = localStorage.getItem('holdings');\n      if (holdings) {\n        try {\n          var holdingsData = JSON.parse(holdings);\n          // Display holdings data; adjust based on your data structure\n          document.getElementById('holdings').textContent = holdingsData;\n        } catch (e) {\n          document.getElementById('holdings').textContent = holdings;\n        }\n      } else {\n        document.getElementById('holdings').textContent = 'No holdings available.';\n      }\n    };\n\n    // Dummy submit order function for Trade section\n    function submitOrder(event) {\n      event.preventDefault();\n      alert('Order submission functionality coming soon!');\n    }\n  </script>\n</body>\n</html>\n```
+
+---
+
+### **How It Works:**
+- **Navigation:** The sidebar links switch between Dashboard, Trade, Portfolio, News, and Leaderboard sections.
+- **Data Display:** On page load, the script retrieves the participant's name, funds, and holdings from `localStorage` (set during login) and displays them.
+- **Dummy Order Function:** The Trade section includes an order form that currently triggers a placeholder alert.
+
+---
+
+Make sure that during the login process (in your `index.html`), you save the participant's name to `localStorage` (for example, via `localStorage.setItem('participantName', name)`) before redirecting to `dashboard.html`.
+
+Let me know if you need any further adjustments or additional features!
