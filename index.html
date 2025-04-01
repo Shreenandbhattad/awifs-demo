@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AWIFS - Mock Stock Competition</title>
   <style>
-    /* RESET */
+    /* RESET & GENERAL */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { font-family: 'Arial', sans-serif; background: #f4f7f9; color: #333; }
+    body, html { font-family: Arial, sans-serif; background: #f4f7f9; color: #333; }
     
-    /* Login Section */
+    /* LOGIN SECTION */
     #loginSection {
       max-width: 400px;
       margin: 100px auto;
@@ -34,9 +34,9 @@
       border-radius: 3px;
       cursor: pointer;
     }
-    #loginMessage { color: red; }
+    #loginMessage { color: red; margin-top: 10px; }
     
-    /* Portal Header */
+    /* PORTAL HEADER */
     header {
       background-color: #2980b9;
       color: white;
@@ -47,7 +47,7 @@
     /* SIDEBAR */
     .sidebar {
       position: fixed;
-      top: 60px; /* Leave space for header */
+      top: 60px; /* leave space for header */
       left: 0;
       width: 220px;
       height: calc(100vh - 60px);
@@ -80,6 +80,7 @@
       margin-left: 240px;
       padding: 20px;
     }
+    
     .header-content {
       display: flex;
       justify-content: space-between;
@@ -112,7 +113,7 @@
       cursor: pointer;
     }
     
-    /* CARDS */
+    /* CARDS & TABLES */
     .card {
       background: #fff;
       padding: 20px;
@@ -123,8 +124,6 @@
     h2.section-title {
       margin-bottom: 15px;
     }
-    
-    /* TABLE STYLES */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -146,55 +145,37 @@
       overflow-y: auto;
     }
     
-    /* TABS (for additional navigation if needed) */
-    .nav-tabs {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .nav-tabs button {
-      padding: 10px 15px;
-      border: none;
-      background-color: #bdc3c7;
-      cursor: pointer;
-      border-radius: 3px;
-    }
-    .nav-tabs button.active {
-      background-color: #2980b9;
-      color: #fff;
-    }
-    
     /* FORM STYLES */
     form label { display: block; margin: 10px 0 5px; }
     form input, form select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 3px; }
     form button { margin-top: 15px; padding: 10px 15px; border: none; background-color: #27ae60; color: #fff; border-radius: 3px; cursor: pointer; }
     
-    /* Hide sections initially */
+    /* Hide portal sections until needed */
     .section { display: none; }
   </style>
 </head>
 <body>
-  <!-- Login Section -->
+  <!-- LOGIN SECTION -->
   <div id="loginSection">
     <h2>Login</h2>
     <label for="uid">UID:</label>
-    <input type="text" id="uid" required>
+    <input type="text" id="uid" placeholder="Enter UID" required>
     <br>
     <label for="name">Name:</label>
-    <input type="text" id="name" required>
+    <input type="text" id="name" placeholder="Enter Name" required>
     <br>
     <button onclick="login()">Login</button>
     <p id="loginMessage"></p>
   </div>
-
-  <!-- Portal Section (hidden until login) -->
+  
+  <!-- PORTAL SECTION (hidden until login) -->
   <div id="portalSection" style="display: none;">
-    <!-- Portal Header -->
+    <!-- PORTAL HEADER -->
     <header>
       <h1>Welcome, <span id="participantName"></span>!</h1>
     </header>
     
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <h2>AWIFS<br>Mock Stock</h2>
       <ul>
@@ -206,7 +187,7 @@
       </ul>
     </div>
     
-    <!-- Main Content -->
+    <!-- MAIN CONTENT -->
     <div class="main-content">
       <!-- Dashboard Section -->
       <div id="dashboard" class="section" style="display: block;">
@@ -232,16 +213,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>THC</td>
-                <td>$100</td>
-                <td>+1%</td>
-              </tr>
-              <tr>
-                <td>Fuel Zone</td>
-                <td>$200</td>
-                <td>-0.5%</td>
-              </tr>
+              <!-- Stock data will be populated here -->
             </tbody>
           </table>
         </div>
@@ -258,6 +230,7 @@
               </tr>
             </thead>
             <tbody>
+              <!-- Transactions data (if available) -->
               <tr>
                 <td>12:01</td>
                 <td>THC</td>
@@ -288,11 +261,11 @@
               <option value="sell">Sell</option>
             </select>
             <label for="stockSymbol">Stock Symbol:</label>
-            <input type="text" id="stockSymbol" required>
+            <input type="text" id="stockSymbol" placeholder="Enter Stock Symbol" required>
             <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" required>
+            <input type="number" id="quantity" placeholder="Enter Quantity" required>
             <label for="price">Price (for limit orders):</label>
-            <input type="number" id="price">
+            <input type="number" id="price" placeholder="Enter Price">
             <button type="submit">Submit Order</button>
           </form>
         </div>
@@ -314,6 +287,7 @@
               </tr>
             </thead>
             <tbody>
+              <!-- Holdings data will be populated here -->
               <tr>
                 <td>Fuel Zone</td>
                 <td>50</td>
@@ -334,7 +308,8 @@
       <div id="news" class="section">
         <h2 class="section-title">Market News</h2>
         <div class="news-feed" id="newsFeed">
-          <p>Chat corner temporarily closed down</p>
+          <!-- News items will be populated here -->
+          <p>Loading news...</p>
         </div>
       </div>
       
@@ -351,15 +326,11 @@
               </tr>
             </thead>
             <tbody>
+              <!-- Leaderboard data will be populated here -->
               <tr>
                 <td>1</td>
-                <td>Kamya Gupta</td>
+                <td>Example User</td>
                 <td>$50,000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Neeraja Asnani</td>
-                <td>$47,000</td>
               </tr>
             </tbody>
           </table>
@@ -368,85 +339,171 @@
     </div>
   </div>
   
-  <!-- Scripts -->
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Function to switch between sections
-    function showSection(section) {
-      document.querySelectorAll('.sidebar ul li').forEach(item => {
-        item.classList.remove('active');
-      });
-      document.querySelector(`.sidebar ul li[onclick*="${section}"]`).classList.add('active');
-  
-      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-      document.getElementById(section).style.display = 'block';
-    }
+    // Replace with your deployed Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbym2T6ml7-Fbr_BUl0j7oei4lW-ZCbhXbk2zrrFFALOT2rl8X-Uq4Xc3ndQIUvRsEM/exec";
     
-    // Dummy search function
-    function searchStock() {
-      const query = document.getElementById('searchInput').value;
-      alert('Search for: ' + query + ' (Functionality under development)');
-    }
-    
-    // Dummy order submission function
-    function submitOrder(event) {
-      event.preventDefault();
-      const orderType = document.getElementById('orderType').value;
-      const stockSymbol = document.getElementById('stockSymbol').value;
-      const quantity = document.getElementById('quantity').value;
-      const price = document.getElementById('price').value;
-  
-      fetch("https://script.google.com/macros/s/AKfycbxHWaED_QIRndWrMH85oCcCH84-5khhQaQTZw3RQeKfzzgWKc5BqFSm5hJiTiXnYK4/exec", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'submitOrder',
-          orderType,
-          stockSymbol,
-          quantity,
-          price
-        })
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert('Order submitted: ' + data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    }
-    
-    // Function to log in the participant using the Apps Script endpoint
-
-    function login() {
-      console.log("Login button clicked");
-      var uid = document.getElementById("uid").value;
-      var name = document.getElementById("name").value;
+    // Show the requested section and mark its sidebar item as active
+    function showSection(sectionId) {
+      // Remove active class from all sidebar items
+      document.querySelectorAll('.sidebar ul li').forEach(item => item.classList.remove('active'));
+      // Add active class to the clicked item
+      document.querySelector(`.sidebar ul li[onclick*="${sectionId}"]`).classList.add('active');
       
-      fetch("https://script.google.com/macros/s/AKfycbxHWaED_QIRndWrMH85oCcCH84-5khhQaQTZw3RQeKfzzgWKc5BqFSm5hJiTiXnYK4/exec", {
+      // Hide all sections and display the requested one
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+      
+      // Optional: Fetch fresh data when switching sections
+      if (sectionId === 'dashboard') getStockData();
+      if (sectionId === 'news') getNews();
+      if (sectionId === 'leaderboard') getLeaderboard();
+    }
+    
+    // Login function: Validate user credentials via Apps Script
+    function login() {
+      const uid = document.getElementById("uid").value.trim();
+      const name = document.getElementById("name").value.trim();
+      
+      if (!uid || !name) {
+        document.getElementById("loginMessage").textContent = "Please enter both UID and Name.";
+        return;
+      }
+      
+      fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "loginParticipant",
-          uid: uid,
-          name: name
-        })
+        body: JSON.stringify({ action: "loginParticipant", uid: uid, name: name })
       })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          // Hide the login section and show the portal
+          // Hide login, show portal, display participant name
           document.getElementById("loginSection").style.display = "none";
           document.getElementById("portalSection").style.display = "block";
-  
-          // Display the participant's name in the header
           document.getElementById("participantName").textContent = name;
-          console.log("Funds: " + data.funds + " Holdings: " + data.holdings);
+          
+          // Optionally, store UID globally for later use
+          window.participantUID = uid;
+          // Fetch initial stock data, news, and leaderboard
+          getStockData();
+          getNews();
+          getLeaderboard();
         } else {
           document.getElementById("loginMessage").textContent = data.message;
         }
       })
-      .catch(error => console.error("Error:", error));
+      .catch(error => {
+        console.error("Login Error:", error);
+        document.getElementById("loginMessage").textContent = "Error connecting to server.";
+      });
+    }
+    
+    // Fetch stock market data from Apps Script
+    function getStockData() {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "getStockData" })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          let tbody = "";
+          data.data.forEach(stock => {
+            tbody += `<tr>
+                        <td>${stock.stockSymbol}</td>
+                        <td>$${stock.currentPrice}</td>
+                        <td>${stock.percentChange}%</td>
+                      </tr>`;
+          });
+          document.querySelector("#watchlistTable tbody").innerHTML = tbody;
+        }
+      })
+      .catch(error => console.error("Stock Data Error:", error));
+    }
+    
+    // Submit a buy or sell order via Apps Script
+    function submitOrder(event) {
+      event.preventDefault();
+      const orderType = document.getElementById("orderType").value;
+      const stockSymbol = document.getElementById("stockSymbol").value.trim();
+      const quantity = document.getElementById("quantity").value;
+      const price = document.getElementById("price").value;
+      
+      if (!window.participantUID) {
+        alert("Please log in first.");
+        return;
+      }
+      
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "submitOrder",
+          uid: window.participantUID,
+          stockSymbol: stockSymbol,
+          orderType: orderType,
+          quantity: quantity,
+          price: price
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        if (data.success) {
+          // Optionally refresh stock data and portfolio info here
+          getStockData();
+          getLeaderboard();
+        }
+      })
+      .catch(error => console.error("Order Error:", error));
+    }
+    
+    // Fetch news updates from Apps Script
+    function getNews() {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "getNews" })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          let newsHTML = "";
+          data.data.forEach(item => {
+            newsHTML += `<p><strong>${item.timestamp}:</strong> ${item.headline}</p>`;
+          });
+          document.getElementById("newsFeed").innerHTML = newsHTML;
+        }
+      })
+      .catch(error => console.error("News Error:", error));
+    }
+    
+    // Fetch leaderboard data from Apps Script
+    function getLeaderboard() {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "getLeaderboard" })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          let tbody = "";
+          data.data.forEach(entry => {
+            tbody += `<tr>
+                        <td>${entry.rank}</td>
+                        <td>${entry.name}</td>
+                        <td>$${entry.portfolioValue}</td>
+                      </tr>`;
+          });
+          document.querySelector("#leaderboardTable tbody").innerHTML = tbody;
+        }
+      })
+      .catch(error => console.error("Leaderboard Error:", error));
     }
     
     // Load a sample performance chart (dummy data)
@@ -468,7 +525,7 @@
       });
     }
     
-    // Initial load
+    // Initialize the chart on window load
     window.onload = function() {
       loadChart();
     };
