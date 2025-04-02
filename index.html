@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AWIFS - Mock Stock Competition</title>
   <style>
-    /* RESET & GENERAL */
+    /* RESET */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { font-family: Arial, sans-serif; background: #f4f7f9; color: #333; }
+    body, html { font-family: 'Arial', sans-serif; background: #f4f7f9; color: #333; }
     
-    /* LOGIN SECTION */
+    /* Login Section */
     #loginSection {
       max-width: 400px;
       margin: 100px auto;
@@ -34,9 +34,9 @@
       border-radius: 3px;
       cursor: pointer;
     }
-    #loginMessage { color: red; margin-top: 10px; }
+    #loginMessage { color: red; }
     
-    /* PORTAL HEADER */
+    /* Portal Header */
     header {
       background-color: #2980b9;
       color: white;
@@ -80,7 +80,6 @@
       margin-left: 240px;
       padding: 20px;
     }
-    
     .header-content {
       display: flex;
       justify-content: space-between;
@@ -113,7 +112,7 @@
       cursor: pointer;
     }
     
-    /* CARDS & TABLES */
+    /* CARDS */
     .card {
       background: #fff;
       padding: 20px;
@@ -121,9 +120,9 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    h2.section-title {
-      margin-bottom: 15px;
-    }
+    h2.section-title { margin-bottom: 15px; }
+    
+    /* TABLE STYLES */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -145,17 +144,35 @@
       overflow-y: auto;
     }
     
+    /* TABS (if needed) */
+    .nav-tabs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .nav-tabs button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #bdc3c7;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .nav-tabs button.active {
+      background-color: #2980b9;
+      color: #fff;
+    }
+    
     /* FORM STYLES */
     form label { display: block; margin: 10px 0 5px; }
     form input, form select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 3px; }
     form button { margin-top: 15px; padding: 10px 15px; border: none; background-color: #27ae60; color: #fff; border-radius: 3px; cursor: pointer; }
     
-    /* Hide portal sections until needed */
+    /* Hide portal sections initially */
     .section { display: none; }
   </style>
 </head>
 <body>
-  <!-- LOGIN SECTION -->
+  <!-- Login Section -->
   <div id="loginSection">
     <h2>Login</h2>
     <label for="uid">UID:</label>
@@ -168,14 +185,14 @@
     <p id="loginMessage"></p>
   </div>
   
-  <!-- PORTAL SECTION (hidden until login) -->
+  <!-- Portal Section (hidden until login is successful) -->
   <div id="portalSection" style="display: none;">
-    <!-- PORTAL HEADER -->
+    <!-- Portal Header -->
     <header>
       <h1>Welcome, <span id="participantName"></span>!</h1>
     </header>
     
-    <!-- SIDEBAR -->
+    <!-- Sidebar -->
     <div class="sidebar">
       <h2>AWIFS<br>Mock Stock</h2>
       <ul>
@@ -187,7 +204,7 @@
       </ul>
     </div>
     
-    <!-- MAIN CONTENT -->
+    <!-- Main Content -->
     <div class="main-content">
       <!-- Dashboard Section -->
       <div id="dashboard" class="section" style="display: block;">
@@ -213,7 +230,16 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Stock data will be populated here -->
+              <tr>
+                <td>THC</td>
+                <td>$100</td>
+                <td>+1%</td>
+              </tr>
+              <tr>
+                <td>Fuel Zone</td>
+                <td>$200</td>
+                <td>-0.5%</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -230,7 +256,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Example data -->
               <tr>
                 <td>12:01</td>
                 <td>THC</td>
@@ -261,11 +286,11 @@
               <option value="sell">Sell</option>
             </select>
             <label for="stockSymbol">Stock Symbol:</label>
-            <input type="text" id="stockSymbol" placeholder="Enter Stock Symbol" required>
+            <input type="text" id="stockSymbol" required>
             <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" placeholder="Enter Quantity" required>
+            <input type="number" id="quantity" required>
             <label for="price">Price (for limit orders):</label>
-            <input type="number" id="price" placeholder="Enter Price">
+            <input type="number" id="price">
             <button type="submit">Submit Order</button>
           </form>
         </div>
@@ -287,7 +312,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Example data -->
               <tr>
                 <td>Fuel Zone</td>
                 <td>50</td>
@@ -325,11 +349,10 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Leaderboard data will be populated here -->
               <tr>
                 <td>1</td>
-                <td>Example User</td>
-                <td>$50,000</td>
+                <td>Loading...</td>
+                <td>Loading...</td>
               </tr>
             </tbody>
           </table>
@@ -338,109 +361,82 @@
     </div>
   </div>
   
-  <!-- SCRIPTS -->
+  <!-- Chart.js CDN for portfolio performance -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <script>
-    // Replace with your deployed Apps Script URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbym2T6ml7-Fbr_BUl0j7oei4lW-ZCbhXbk2zrrFFALOT2rl8X-Uq4Xc3ndQIUvRsEM/exec";
+    // Your Apps Script Web App URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYGFG0v91-GCaxZgW-LZU8r3pvNLk5djADrMn7K_KgrOszf1gJmYNo5txmn8Sk1mw/exec";
     
-    // Show the requested section and mark its sidebar item as active
-    function showSection(sectionId) {
-      document.querySelectorAll('.sidebar ul li').forEach(item => item.classList.remove('active'));
-      document.querySelector(`.sidebar ul li[onclick*="${sectionId}"]`).classList.add('active');
-      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-      document.getElementById(sectionId).style.display = 'block';
-      if (sectionId === 'dashboard') getStockData();
-      if (sectionId === 'news') getNews();
-      if (sectionId === 'leaderboard') getLeaderboard();
-    }
-    
-    // Login function: Validate user credentials via Apps Script
-    function login() {
-      const uid = document.getElementById("uid").value.trim();
-      const name = document.getElementById("name").value.trim();
-      
-      if (!uid || !name) {
-        document.getElementById("loginMessage").textContent = "Please enter both UID and Name.";
-        return;
-      }
-      
-      console.log("Attempting login for UID:", uid, "Name:", name);
-      
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "loginParticipant", uid: uid, name: name })
-      })
-      .then(response => {
-        console.log("Response received", response);
-        return response.json();
-      })
-      .then(data => {
-        console.log("Login response:", data);
-        if (data.success) {
-          document.getElementById("loginSection").style.display = "none";
-          document.getElementById("portalSection").style.display = "block";
-          document.getElementById("participantName").textContent = name;
-          window.participantUID = uid;
-          getStockData();
-          getNews();
-          getLeaderboard();
-        } else {
-          document.getElementById("loginMessage").textContent = data.message;
-        }
-      })
-      .catch(error => {
-        console.error("Login Error:", error);
-        document.getElementById("loginMessage").textContent = "Error connecting to server.";
+    // Function to show a specific section
+    function showSection(section) {
+      document.querySelectorAll('.sidebar ul li').forEach(item => {
+        item.classList.remove('active');
       });
+      document.querySelector(`.sidebar ul li[onclick*="${section}"]`).classList.add('active');
+  
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(section).style.display = 'block';
     }
     
-    // Fetch stock market data from Apps Script
-    function getStockData() {
+    // Dummy search function (you can extend this later)
+    function searchStock() {
+      const query = document.getElementById('searchInput').value;
+      alert('Search for: ' + query + ' (Functionality under development)');
+    }
+    
+    // Login function
+    function login() {
+      console.log("Login button clicked");
+      const uid = document.getElementById("uid").value;
+      const name = document.getElementById("name").value;
+      
       fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "getStockData" })
+        body: JSON.stringify({
+          action: "loginParticipant",
+          uid: uid,
+          name: name
+        })
       })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          let tbody = "";
-          data.data.forEach(stock => {
-            tbody += `<tr>
-                        <td>${stock.stockSymbol}</td>
-                        <td>$${stock.currentPrice}</td>
-                        <td>${stock.percentChange}%</td>
-                      </tr>`;
-          });
-          document.querySelector("#watchlistTable tbody").innerHTML = tbody;
+          // Hide login section, show portal section
+          document.getElementById("loginSection").style.display = "none";
+          document.getElementById("portalSection").style.display = "block";
+  
+          // Display participant's name in header
+          document.getElementById("participantName").textContent = name;
+          console.log("Login successful. Funds: " + data.funds + ", Holdings: " + data.holdings);
+  
+          // Optionally, you can load additional data here (e.g., stock data or leaderboard)
+          loadNews();
+        } else {
+          document.getElementById("loginMessage").textContent = data.message;
         }
       })
-      .catch(error => console.error("Stock Data Error:", error));
+      .catch(error => console.error("Error during login:", error));
     }
     
-    // Submit a buy or sell order via Apps Script
+    // Submit Order function
     function submitOrder(event) {
       event.preventDefault();
+      const uid = document.getElementById("uid").value; // Using the same UID from login
       const orderType = document.getElementById("orderType").value;
-      const stockSymbol = document.getElementById("stockSymbol").value.trim();
+      const stockSymbol = document.getElementById("stockSymbol").value;
       const quantity = document.getElementById("quantity").value;
       const price = document.getElementById("price").value;
-      
-      if (!window.participantUID) {
-        alert("Please log in first.");
-        return;
-      }
       
       fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "submitOrder",
-          uid: window.participantUID,
-          stockSymbol: stockSymbol,
+          uid: uid,
           orderType: orderType,
+          stockSymbol: stockSymbol,
           quantity: quantity,
           price: price
         })
@@ -448,59 +444,30 @@
       .then(response => response.json())
       .then(data => {
         alert(data.message);
-        if (data.success) {
-          getStockData();
-          getLeaderboard();
-        }
       })
-      .catch(error => console.error("Order Error:", error));
+      .catch(error => console.error("Error submitting order:", error));
     }
     
-    // Fetch news updates from Apps Script
-    function getNews() {
+    // Load News from backend
+    function loadNews() {
       fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "getNews" })
       })
       .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          let newsHTML = "";
-          data.data.forEach(item => {
-            newsHTML += `<p><strong>${item.timestamp}:</strong> ${item.headline}</p>`;
-          });
-          document.getElementById("newsFeed").innerHTML = newsHTML;
+      .then(newsItems => {
+        const newsFeed = document.getElementById("newsFeed");
+        if (newsItems.length > 0) {
+          newsFeed.innerHTML = newsItems.map(item => `<p><strong>${item.timestamp}</strong>: ${item.headline}</p>`).join("");
+        } else {
+          newsFeed.innerHTML = "<p>No news available</p>";
         }
       })
-      .catch(error => console.error("News Error:", error));
+      .catch(error => console.error("Error loading news:", error));
     }
     
-    // Fetch leaderboard data from Apps Script
-    function getLeaderboard() {
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "getLeaderboard" })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          let tbody = "";
-          data.data.forEach(entry => {
-            tbody += `<tr>
-                        <td>${entry.rank}</td>
-                        <td>${entry.name}</td>
-                        <td>$${entry.portfolioValue}</td>
-                      </tr>`;
-          });
-          document.querySelector("#leaderboardTable tbody").innerHTML = tbody;
-        }
-      })
-      .catch(error => console.error("Leaderboard Error:", error));
-    }
-    
-    // Load a sample performance chart (dummy data)
+    // Load a sample performance chart (dummy data for now)
     function loadChart() {
       const ctx = document.getElementById('performanceChart').getContext('2d');
       new Chart(ctx, {
@@ -519,6 +486,7 @@
       });
     }
     
+    // Initial load
     window.onload = function() {
       loadChart();
     };
