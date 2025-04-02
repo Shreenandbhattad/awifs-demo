@@ -368,24 +368,23 @@
     // Your Apps Script Web App URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYGFG0v91-GCaxZgW-LZU8r3pvNLk5djADrMn7K_KgrOszf1gJmYNo5txmn8Sk1mw/exec";
     
-    // Function to show a specific section
+    // Function to switch sections
     function showSection(section) {
       document.querySelectorAll('.sidebar ul li').forEach(item => {
         item.classList.remove('active');
       });
       document.querySelector(`.sidebar ul li[onclick*="${section}"]`).classList.add('active');
-  
       document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
       document.getElementById(section).style.display = 'block';
     }
     
-    // Dummy search function (you can extend this later)
+    // Dummy search function
     function searchStock() {
       const query = document.getElementById('searchInput').value;
       alert('Search for: ' + query + ' (Functionality under development)');
     }
     
-    // Login function
+    // Login function with debugging logs
     function login() {
       console.log("Login button clicked");
       const uid = document.getElementById("uid").value;
@@ -394,36 +393,34 @@
       fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "loginParticipant",
-          uid: uid,
-          name: name
-        })
+        body: JSON.stringify({ action: "loginParticipant", uid: uid, name: name })
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log("Response status:", response.status);
+        return response.json();
+      })
       .then(data => {
+        console.log("Login response:", data);
         if (data.success) {
-          // Hide login section, show portal section
+          // Hide login and show portal
           document.getElementById("loginSection").style.display = "none";
           document.getElementById("portalSection").style.display = "block";
-  
-          // Display participant's name in header
           document.getElementById("participantName").textContent = name;
-          console.log("Login successful. Funds: " + data.funds + ", Holdings: " + data.holdings);
-  
-          // Optionally, you can load additional data here (e.g., stock data or leaderboard)
-          loadNews();
+          loadNews(); // load news after login
         } else {
           document.getElementById("loginMessage").textContent = data.message;
         }
       })
-      .catch(error => console.error("Error during login:", error));
+      .catch(error => {
+        console.error("Error during login:", error);
+        document.getElementById("loginMessage").textContent = "Login failed. Check console for errors.";
+      });
     }
     
-    // Submit Order function
+    // Submit order function
     function submitOrder(event) {
       event.preventDefault();
-      const uid = document.getElementById("uid").value; // Using the same UID from login
+      const uid = document.getElementById("uid").value;
       const orderType = document.getElementById("orderType").value;
       const stockSymbol = document.getElementById("stockSymbol").value;
       const quantity = document.getElementById("quantity").value;
@@ -448,7 +445,7 @@
       .catch(error => console.error("Error submitting order:", error));
     }
     
-    // Load News from backend
+    // Load news function
     function loadNews() {
       fetch(SCRIPT_URL, {
         method: "POST",
@@ -467,7 +464,7 @@
       .catch(error => console.error("Error loading news:", error));
     }
     
-    // Load a sample performance chart (dummy data for now)
+    // Load a sample performance chart
     function loadChart() {
       const ctx = document.getElementById('performanceChart').getContext('2d');
       new Chart(ctx, {
