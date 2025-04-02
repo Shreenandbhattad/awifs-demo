@@ -144,24 +144,6 @@
       overflow-y: auto;
     }
     
-    /* TABS (if needed) */
-    .nav-tabs {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .nav-tabs button {
-      padding: 10px 15px;
-      border: none;
-      background-color: #bdc3c7;
-      cursor: pointer;
-      border-radius: 3px;
-    }
-    .nav-tabs button.active {
-      background-color: #2980b9;
-      color: #fff;
-    }
-    
     /* FORM STYLES */
     form label { display: block; margin: 10px 0 5px; }
     form input, form select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 3px; }
@@ -365,10 +347,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <script>
-    // Your Apps Script Web App URL
+    // New Apps Script Web App URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvjoSlIyTegFxHMAEuS_DPwMnoBPssK8yJ-8U-x1-HBEXANyFGrRsnCCstoOFPsis/exec";
     
-    // Function to switch sections
+    // Function to switch between sections
     function showSection(section) {
       document.querySelectorAll('.sidebar ul li').forEach(item => {
         item.classList.remove('active');
@@ -387,8 +369,9 @@
     // Login function with debugging logs
     function login() {
       console.log("Login button clicked");
-      const uid = document.getElementById("uid").value;
-      const name = document.getElementById("name").value;
+      const uid = document.getElementById("uid").value.trim();
+      const name = document.getElementById("name").value.trim();
+      console.log("Attempting login with UID:", uid, "Name:", name);
       
       fetch(SCRIPT_URL, {
         method: "POST",
@@ -406,7 +389,7 @@
           document.getElementById("loginSection").style.display = "none";
           document.getElementById("portalSection").style.display = "block";
           document.getElementById("participantName").textContent = name;
-          loadNews(); // load news after login
+          loadNews(); // Load news after login
         } else {
           document.getElementById("loginMessage").textContent = data.message;
         }
@@ -420,7 +403,7 @@
     // Submit order function
     function submitOrder(event) {
       event.preventDefault();
-      const uid = document.getElementById("uid").value;
+      const uid = document.getElementById("uid").value.trim();
       const orderType = document.getElementById("orderType").value;
       const stockSymbol = document.getElementById("stockSymbol").value;
       const quantity = document.getElementById("quantity").value;
