@@ -1,82 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AWIFS - Mock Stock Competition</title>
+  <title>Login Test</title>
   <style>
-    /* RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { font-family: Arial, sans-serif; background: #f4f7f9; color: #333; }
-    
-    /* Login Section */
-    #loginSection {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    #loginSection input {
-      width: 80%;
-      padding: 8px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-    #loginSection button {
-      padding: 10px 15px;
-      background-color: #27ae60;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    #loginMessage { color: red; }
-    
-    /* Portal Section */
-    #portalSection { display: none; }
-    header {
-      background-color: #2980b9;
-      color: #fff;
-      padding: 10px 20px;
-      text-align: center;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f7f9; padding: 20px; }
+    #login { max-width: 400px; margin: 50px auto; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 5px; }
+    label { display: block; margin: 10px 0 5px; }
+    input { width: 100%; padding: 8px; }
+    button { margin-top: 15px; padding: 10px; background: #27ae60; color: #fff; border: none; cursor: pointer; }
+    #result { margin-top: 15px; font-weight: bold; }
   </style>
 </head>
 <body>
-  <!-- Login Section -->
-  <div id="loginSection">
+  <div id="login">
     <h2>Login</h2>
     <label for="uid">UID:</label>
-    <input type="text" id="uid" placeholder="Enter UID" required>
-    <br>
+    <input type="text" id="uid" placeholder="Enter UID">
     <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Enter Name" required>
-    <br>
+    <input type="text" id="name" placeholder="Enter Name">
     <button onclick="login()">Login</button>
-    <p id="loginMessage"></p>
-  </div>
-  
-  <!-- Portal Section (shown after login) -->
-  <div id="portalSection">
-    <header>
-      <h1>Welcome, <span id="participantName"></span>!</h1>
-    </header>
-    <p>This is your main portal. Additional functionalities (order submission, news, etc.) will go here.</p>
+    <p id="result"></p>
   </div>
   
   <script>
     // Replace with your deployed Apps Script Web App URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXh8deZuY6gZGIzr4pKseL87iNuaU4RVoK3OFw9ZQjiosQsPfZ4AC15lAx2kKh59Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybZBDvCtLUwGuN3-3SnHOW4Rknm3aeJJUhZrarBPOHSlI5_d4tMaSJBJD0j_bTOyQ/exec";
     
-    // Login function: sends UID and Name to the backend for verification.
+    // Function to attempt login
     function login() {
       const uid = document.getElementById("uid").value.trim();
       const name = document.getElementById("name").value.trim();
-      console.log("Attempting login with UID:", uid, "Name:", name);
+      
+      // Debug log: check input values
+      console.log("Logging in with UID:", uid, "Name:", name);
       
       fetch(SCRIPT_URL, {
         method: "POST",
@@ -89,18 +46,14 @@
       })
       .then(data => {
         console.log("Login response:", data);
+        document.getElementById("result").innerText = data.message;
         if (data.success) {
-          // On successful login, hide login section and show portal.
-          document.getElementById("loginSection").style.display = "none";
-          document.getElementById("portalSection").style.display = "block";
-          document.getElementById("participantName").textContent = name;
-        } else {
-          document.getElementById("loginMessage").textContent = data.message;
+          document.getElementById("result").innerText += " Funds: " + data.funds + ", Holdings: " + data.holdings;
         }
       })
       .catch(error => {
         console.error("Error during login:", error);
-        document.getElementById("loginMessage").textContent = "Login failed. Check console for errors.";
+        document.getElementById("result").innerText = "Error: " + error;
       });
     }
   </script>
