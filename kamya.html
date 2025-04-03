@@ -1,65 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shreenand's Stock Portal</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .container { width: 80%; margin: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid black; padding: 10px; text-align: center; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWIFS - Mock Stock Competition</title>
+<style>
+/* RESET */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body, html { font-family: 'Arial', sans-serif; background: #f4f7f9; color: #333; }
+
+/* SIDEBAR */
+.sidebar {
+position: fixed;
+top: 0;
+left: 0;
+width: 220px;
+height: 100vh;
+background-color: #2c3e50;
+color: #ecf0f1;
+padding: 20px;
+overflow-y: auto;
+}
+.sidebar h2 {
+text-align: center;
+margin-bottom: 10px;
+font-size: 24px;
+letter-spacing: 2px;
+}
+.sidebar p {
+text-align: center;
+margin-bottom: 30px;
+font-size: 16px;
+}
+.sidebar ul {
+list-style: none;
+}
+.sidebar ul li {
+padding: 15px 20px;
+margin-bottom: 10px;
+cursor: pointer;
+border-radius: 3px;
+}
+.sidebar ul li:hover, .sidebar ul li.active {
+background-color: #34495e;
+}
+
+/* MAIN CONTENT */
+.main-content {
+margin-left: 240px;
+padding: 20px;
+}
+.card {
+background: #fff;
+padding: 20px;
+margin-bottom: 20px;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* TABLE STYLES */
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 10px;
+}
+th, td {
+padding: 10px;
+border: 1px solid #bdc3c7;
+text-align: left;
+}
+th { background: #ecf0f1; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome, Shreenand</h2>
-        <h3>Funds: <span id="funds">Loading...</span></h3>
-        
-        <h3>Your Stock Holdings</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Stock</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody id="holdings"></tbody>
-        </table>
+<!-- Sidebar -->
+<div class="sidebar">
+<h2>AWIFS Mock Stock</h2>
+<p>UID: A1</p>
+<p>Name: Kamya</p>
+<ul>
+<li class="active">Dashboard</li>
+<li>Trade</li>
+<li>Portfolio</li>
+<li>News</li>
+<li>Leaderboard</li>
+</ul>
+</div>
 
-        <h3>Transaction History</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Stock</th>
-                    <th>Type</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Timestamp</th>
-                </tr>
-            </thead>
-            <tbody id="transactions"></tbody>
-        </table>
-    </div>
+<!-- Main Content -->
+<div class="main-content">
+<div class="card">
+<h2>Dashboard</h2>
+<table>
+<thead>
+<tr>
+<th>Stock</th>
+<th>Price</th>
+<th>% Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>THC</td>
+<td>$100</td>
+<td>+1%</td>
+</tr>
+<tr>
+<td>Fuel Zone</td>
+<td>$200</td>
+<td>-0.5%</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-    <script>
-        async function fetchData() {
-            try {
-                let response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?uid=A1");
-                let data = await response.json();
-                
-                document.getElementById("funds").innerText = "$" + data.funds;
-                
-                let holdingsTable = document.getElementById("holdings");
-                holdingsTable.innerHTML = data.holdings.map(h => `<tr><td>${h.stock}</td><td>${h.quantity}</td></tr>`).join('');
-                
-                let transactionsTable = document.getElementById("transactions");
-                transactionsTable.innerHTML = data.transactions.map(t => `<tr><td>${t.stock}</td><td>${t.type}</td><td>${t.quantity}</td><td>$${t.price}</td><td>${t.timestamp}</td></tr>`).join('');
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        }
-        fetchData();
-    </script>
+<div class="card">
+<h2>Recent Transactions</h2>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Stock</th>
+<th>Type</th>
+<th>Quantity</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12:01</td>
+<td>THC</td>
+<td>Buy</td>
+<td>10</td>
+<td>$100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
 </body>
 </html>
