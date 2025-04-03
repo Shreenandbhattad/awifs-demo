@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Portal Login</title>
+    <title>Login</title>
     <script>
-        async function login() {
-            const uid = document.getElementById("uid").value;
-            const scriptURL = "https://script.google.com/macros/s/AKfycbxwyUWr3VAGqRAqahOKaHWEX_NdAAlcimPXdd1eQ-iAwntxB3WKWP3EQ6R2dpcsdjA/exec";  // Replace with your Apps Script URL
+        function login() {
+            const uid = document.getElementById("uid").value.trim();
 
-            const response = await fetch(scriptURL, {
-                method: "POST",
-                body: JSON.stringify({ action: "login", uid }),
-                headers: { "Content-Type": "application/json" }
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                localStorage.setItem("uid", result.uid);
-                localStorage.setItem("name", result.name);
-                window.location.href = "portal.html";  // Redirect after login
+            if (uid === "A1") {
+                window.location.href = "shreenand.html";  // Redirect to Shreenand's portal
+            } else if (uid === "A2") {
+                window.location.href = "kamya.html";  // Redirect to Kamya's portal
             } else {
-                alert("Login failed: " + result.message);
+                alert("Invalid UID! Please enter a valid participant ID.");
             }
         }
     </script>
 </head>
 <body>
     <h2>Login</h2>
-    <input type="text" id="uid" placeholder="Enter UID" required>
+    <input type="text" id="uid" placeholder="Enter UID">
     <button onclick="login()">Login</button>
 </body>
 </html>
+
