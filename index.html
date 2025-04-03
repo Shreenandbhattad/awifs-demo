@@ -1,41 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Participant Login</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f7f9; }
-    input { padding: 10px; margin: 10px; width: 200px; }
-    button { padding: 10px; background: #27ae60; color: #fff; border: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portal Login</title>
+    <script>
+        async function login() {
+            const uid = document.getElementById("uid").value;
+            const scriptURL = "https://script.google.com/macros/s/AKfycbxwyUWr3VAGqRAqahOKaHWEX_NdAAlcimPXdd1eQ-iAwntxB3WKWP3EQ6R2dpcsdjA/exec";  // Replace with your Apps Script URL
+
+            const response = await fetch(scriptURL, {
+                method: "POST",
+                body: JSON.stringify({ action: "login", uid }),
+                headers: { "Content-Type": "application/json" }
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                localStorage.setItem("uid", result.uid);
+                localStorage.setItem("name", result.name);
+                window.location.href = "portal.html";  // Redirect after login
+            } else {
+                alert("Login failed: " + result.message);
+            }
+        }
+    </script>
 </head>
 <body>
-  <h2>Enter UID to Access Your Portal</h2>
-  <input type="text" id="uid" placeholder="Enter UID">
-  <button onclick="login()">Login</button>
-
-  <script>
-    function login() {
-      var uid = document.getElementById("uid").value.trim();
-      if (!uid) {
-        alert("Please enter a UID");
-        return;
-      }
-      
-      fetch(`https://script.google.com/macros/s/AKfycbzmqj8dfAo_f1zY7Nfylx5ooXMlR9EYjdhYWciZ51hBJxOaCNVJ_SzpN1R1WlfpMbg/exec?action=getParticipant&uid=${uid}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            localStorage.setItem("uid", uid);
-            localStorage.setItem("name", data.name);
-            localStorage.setItem("funds", data.funds);
-            localStorage.setItem("holdings", data.holdings);
-            window.location.href = "portal.html"; // Redirect to individual portal
-          } else {
-            alert("Invalid UID. Try again.");
-          }
-        })
-        .catch(error => console.error("Error:", error));
-    }
-  </script>
+    <h2>Login</h2>
+    <input type="text" id="uid" placeholder="Enter UID" required>
+    <button onclick="login()">Login</button>
 </body>
 </html>
