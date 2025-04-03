@@ -3,16 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shreenand's Portal</title>
-    <script>
-        function logout() {
-            window.location.href = "index.html";  // Go back to login page
-        }
-    </script>
+    <title>Shreenand's Stock Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 80%; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+    </style>
 </head>
 <body>
-    <h2>Welcome, Shreenand!</h2>
-    <p>This is your personalized stock trading portal.</p>
-    <button onclick="logout()">Logout</button>
+    <div class="container">
+        <h2>Welcome, Shreenand</h2>
+        <h3>Funds: <span id="funds">Loading...</span></h3>
+        
+        <h3>Your Stock Holdings</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody id="holdings"></tbody>
+        </table>
+
+        <h3>Transaction History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="transactions"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                let response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?uid=A1");
+                let data = await response.json();
+                
+                document.getElementById("funds").innerText = "$" + data.funds;
+                
+                let holdingsTable = document.getElementById("holdings");
+                holdingsTable.innerHTML = data.holdings.map(h => `<tr><td>${h.stock}</td><td>${h.quantity}</td></tr>`).join('');
+                
+                let transactionsTable = document.getElementById("transactions");
+                transactionsTable.innerHTML = data.transactions.map(t => `<tr><td>${t.stock}</td><td>${t.type}</td><td>${t.quantity}</td><td>$${t.price}</td><td>${t.timestamp}</td></tr>`).join('');
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchData();
+    </script>
 </body>
 </html>
