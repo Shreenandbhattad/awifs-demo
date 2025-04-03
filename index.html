@@ -4,24 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            margin-bottom: 1rem;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
     <script>
         function login() {
             const uid = document.getElementById("uid").value.trim();
+            const errorMsg = document.getElementById("error-msg");
 
             if (uid === "A1") {
-                window.location.href = "shreenand.html";  // Redirect to Shreenand's portal
+                window.location.href = "shreenand.html";
             } else if (uid === "A2") {
-                window.location.href = "kamya.html";  // Redirect to Kamya's portal
+                window.location.href = "kamya.html";
             } else {
-                alert("Invalid UID! Please enter a valid participant ID.");
+                errorMsg.textContent = "Invalid UID! Please enter a valid participant ID.";
             }
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("uid").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    login();
+                }
+            });
+        });
     </script>
 </head>
 <body>
-    <h2>Login</h2>
-    <input type="text" id="uid" placeholder="Enter UID">
-    <button onclick="login()">Login</button>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="uid" placeholder="Enter UID">
+        <button onclick="login()">Login</button>
+        <p id="error-msg" class="error"></p>
+    </div>
+
 </body>
 </html>
-
