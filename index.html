@@ -1,60 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Login Test</title>
+  <title>Participant Login</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f7f9; padding: 20px; }
-    #login { max-width: 400px; margin: 50px auto; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 5px; }
-    label { display: block; margin: 10px 0 5px; }
-    input { width: 100%; padding: 8px; }
-    button { margin-top: 15px; padding: 10px; background: #27ae60; color: #fff; border: none; cursor: pointer; }
-    #result { margin-top: 15px; font-weight: bold; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f7f9; }
+    input { padding: 10px; margin: 10px; width: 200px; }
+    button { padding: 10px; background: #27ae60; color: #fff; border: none; }
   </style>
 </head>
 <body>
-  <div id="login">
-    <h2>Login</h2>
-    <label for="uid">UID:</label>
-    <input type="text" id="uid" placeholder="Enter UID">
-    <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Enter Name">
-    <button onclick="login()">Login</button>
-    <p id="result"></p>
-  </div>
-  
+  <h2>Enter UID to Access Your Portal</h2>
+  <input type="text" id="uid" placeholder="Enter UID">
+  <button onclick="login()">Login</button>
+
   <script>
-    // Replace with your deployed Apps Script Web App URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybZBDvCtLUwGuN3-3SnHOW4Rknm3aeJJUhZrarBPOHSlI5_d4tMaSJBJD0j_bTOyQ/exec";
-    
-    // Function to attempt login
     function login() {
-      const uid = document.getElementById("uid").value.trim();
-      const name = document.getElementById("name").value.trim();
+      var uid = document.getElementById("uid").value.trim();
+      if (!uid) {
+        alert("Please enter a UID");
+        return;
+      }
       
-      // Debug log: check input values
-      console.log("Logging in with UID:", uid, "Name:", name);
-      
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "loginParticipant", uid: uid, name: name })
-      })
-      .then(response => {
-        console.log("Response status:", response.status);
-        return response.json();
-      })
-      .then(data => {
-        console.log("Login response:", data);
-        document.getElementById("result").innerText = data.message;
-        if (data.success) {
-          document.getElementById("result").innerText += " Funds: " + data.funds + ", Holdings: " + data.holdings;
-        }
-      })
-      .catch(error => {
-        console.error("Error during login:", error);
-        document.getElementById("result").innerText = "Error: " + error;
-      });
+      fetch(`https://script.google.com/macros/s/AKfycbzmqj8dfAo_f1zY7Nfylx5ooXMlR9EYjdhYWciZ51hBJxOaCNVJ_SzpN1R1WlfpMbg/exec?action=getParticipant&uid=${uid}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            localStorage.setItem("uid", uid);
+            localStorage.setItem("name", data.name);
+            localStorage.setItem("funds", data.funds);
+            localStorage.setItem("holdings", data.holdings);
+            window.location.href = "portal.html"; // Redirect to individual portal
+          } else {
+            alert("Invalid UID. Try again.");
+          }
+        })
+        .catch(error => console.error("Error:", error));
     }
   </script>
 </body>
