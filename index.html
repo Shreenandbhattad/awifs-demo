@@ -58,9 +58,9 @@
             const uid = document.getElementById("uid").value.trim();
             const errorMsg = document.getElementById("error-msg");
 
-            if (uid === "A1") {
+            if (uid === "A175") {
                 window.location.href = "shreenand.html";
-            } else if (uid === "A2") {
+            } else if (uid === "A782") {
                 window.location.href = "kamya.html";
             } else {
                 errorMsg.textContent = "Invalid UID! Please enter a valid participant ID.";
@@ -80,7 +80,7 @@
 
     <div class="login-container">
         <h2>Login</h2>
-        <input type="text" id="uid" placeholder="Enter UID">
+        <input type="text" id="uid" placeholder="Enter Login Code">
         <button onclick="login()">Login</button>
         <p id="error-msg" class="error"></p>
     </div>
